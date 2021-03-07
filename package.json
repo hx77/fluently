@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta2",
     "bootswatch": "^4.6.0",
+    "concurrently": "^6.0.0",
     "js-audio-recorder": "^1.0.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -17,10 +18,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-server": "cd server && flask run --no-debugger",
+    "start-server": "cd server && flask run",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"npm run start-server\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [

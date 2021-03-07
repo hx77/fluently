@@ -1,18 +1,12 @@
-from flask import Flask
-from flask_cors import CORS
-
-
-app = Flask(__name__)
-CORS(app)
-
-
-import os
 import linecache
-from random import randint
+import os
 from pathlib import Path, PurePosixPath
-from flask import render_template, request, jsonify
-from assessment import pronunciation_assessment_continuous_from_file
+from random import randint
 
+from .assessment import pronunciation_assessment_continuous_from_file
+from flask import jsonify, render_template, request
+
+from . import app
 
 movie_line_global = ""
 uploads_dir = os.path.join(app.instance_path, 'uploads')
@@ -26,7 +20,7 @@ def get_movie_line():
     while len(movie_line.split(' ')) < 5 or len(movie_line.split(' ')) > 25:
         # 307413 lines in total
         line_num = randint(1, 307413)
-        random_line = linecache.getline('static/cornell_movie-dialogs_corpus/movie_lines.txt', line_num).strip()
+        random_line = linecache.getline('fluently/static/cornell_movie-dialogs_corpus/movie_lines.txt', line_num).strip()
         fields = random_line.split(' +++$+++ ')
         line_id, movie_id, character_name, movie_line = fields[0], fields[2], fields[3], fields[4]
 
@@ -36,7 +30,7 @@ def get_movie_line():
 
 
 def get_movie_title_from_id(movie_id):
-    with open('static/cornell_movie-dialogs_corpus/movie_titles_metadata.txt') as file:
+    with open('fluently/static/cornell_movie-dialogs_corpus/movie_titles_metadata.txt') as file:
         lines = file.readlines()
         for line in lines:
             fields = line.split(' +++$+++ ')
@@ -48,7 +42,8 @@ def get_movie_title_from_id(movie_id):
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', movie_line=get_movie_line())
+    # return render_template('index.html', movie_line=get_movie_line())
+    return ""
 
 
 @app.route('/line', methods=['GET'])
