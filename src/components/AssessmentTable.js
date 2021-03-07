@@ -8,9 +8,9 @@ class AssessmentList extends React.Component {
     if (this.props.assessment) {
       return (
         <div className="text-center">
-          <div>Accurry {'>='}90: <span className="text-success">Green</span></div>
-          <div>Accurry {'>='}80: <span className="text-warning">Yellow</span></div>
-          <div>Accurry {'<'}80: <span className="text-danger">Red</span></div>
+          <div>Accuracy {'>='}90: <span className="text-success">Green</span></div>
+          <div>Accuracy {'>='}80: <span className="text-warning">Yellow</span></div>
+          <div>Accuracy {'<'}80: <span className="text-danger">Red</span></div>
           <table className="table mx-auto">
             <caption className="caption-top">Sentence Pronunciation Assessment</caption>
             <thead>
