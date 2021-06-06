@@ -46,8 +46,8 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2 mb-3">
-          <a class="navbar-brand mx-auto" href="#">Fluently</a>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-2 mb-3">
+          <a className="navbar-brand mx-auto" href="#">Fluently</a>
         </nav>
         <div className="container">
           <MovieLine assessment={this.state.assessment} />

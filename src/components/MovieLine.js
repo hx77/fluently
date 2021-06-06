@@ -11,7 +11,8 @@ class MovieLine extends React.Component {
       characterName: '',
       movieId: '',
       movieLine: '',
-      movieTitle: ''
+      movieTitle: '',
+      colorList: [],
     }
   }
 
@@ -22,15 +23,22 @@ class MovieLine extends React.Component {
       characterName: response.data.characterName,
       movieId: response.data.movie_id,
       movieLine: response.data.movie_line,
-      movieTitle: response.data.movie_title
-    })
+      movieTitle: response.data.movie_title,
+      colorList: Array(response.data.movie_line.split(' ').length).fill("text-white"),
+    });
   }
   
   componentDidMount() {
     this.setState(this.state, this.loadMovieLine)
   }
 
-  setColor = (accuracy) => {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.assessment !== this.props.assessment) {
+      this.updateColorList();
+    }
+  }
+
+  getColorClass = (accuracy) => {
     if (accuracy > 90) {
       return "text-success"
     } else if (accuracy > 80) {
@@ -39,41 +47,26 @@ class MovieLine extends React.Component {
       return "text-danger"
     }
   }
-
-  getColorList = (assesment) => {
-    let colorList = [];
-
-    if (assesment) {
-      let wordPerformanceList = assesment.word_performance
+  
+  updateColorList = () => {
+    if (this.props.assessment) {
+      let wordPerformanceList = this.props.assessment.word_performance;
+      let colors = [];
       for (let i = 0; i < wordPerformanceList.length; i++) {
-        colorList.push(this.setColor(wordPerformanceList[i].accuracy))
+        colors.push(this.getColorClass(wordPerformanceList[i].accuracy));
       }
+      this.setState({ colorList: colors });
     }
-    
-    return colorList
   }
 
-  splitLine = (colorList) => {
-    let wordList = this.state.movieLine.split(' ')
-    console.log(wordList)
-    console.log(colorList)
-    
-    const jsx = wordList.map((word, idx) => {
-      return <span className={colorList[idx]} id="movieline">{word} </span>
-    })
-    return jsx
-  }
 
   movieLineJSX = () => {
-    console.log(this.props.assessment)
+    const wordList = this.state.movieLine.split(' ');
+    const line = wordList.map((word, idx) => {
+      return <span className={this.state.colorList[idx]} id="movieline">{word} </span>
+    })
     
-    if (this.props.assessment) {
-      let colorList = this.getColorList(this.props.assessment)
-      return this.splitLine(colorList)
-    }
-    return (
-      <div className="text-left" id="movieline">{this.state.movieLine}</div>
-    )
+    return <div className="text-left" id="movieline">{line}</div>
   }
 
   render() {
@@ -84,10 +77,14 @@ class MovieLine extends React.Component {
             {this.movieLineJSX()}
           </div>
           <div className="col-md-3">
-            <div className="font-italic text-capitalize text-right">— {this.state.movieTitle}</div>
+            <div className="font-italic text-capitalize text-right">
+              — {this.state.movieTitle}
+            </div>
           </div>
         </div>
-        <button onClick={this.loadMovieLine} className="btn btn-secondary w-50 py-3">Get a Random Line From a Movie</button>
+        <button onClick={this.loadMovieLine} className="btn btn-secondary w-50 py-3">
+          Get a Random Line From a Movie
+        </button>
       </div>
     )
   }

@@ -2,7 +2,12 @@ import difflib
 import string
 import time
 import azure.cognitiveservices.speech as speechsdk
+import json
 
+config = {
+    "subscription": "dc333e4dc9054474b0fecb6f5dd357a4",
+    "region": "westus"
+}
 
 def pronunciation_assessment_continuous_from_file(filename, reference_text):
     """performs continuous speech recognition asynchronously with input from an audio file"""
@@ -13,9 +18,10 @@ def pronunciation_assessment_continuous_from_file(filename, reference_text):
     # available on en-US language.
 
     speech_config = speechsdk.SpeechConfig(
-        subscription='7515ea1573b64372b78acdaefea69c3b',
-        region='eastus'
+        subscription=config["subscription"],
+        region=config["region"],
     )
+
     # mono WAV / PCM with a sampling rate of 16kHz
     audio_config = speechsdk.audio.AudioConfig(filename=filename)
 
@@ -56,6 +62,7 @@ def pronunciation_assessment_continuous_from_file(filename, reference_text):
             "completeness": pronunciation_result.completeness_score,
             "fluency": pronunciation_result.fluency_score
         }
+        print(sentence_performance_dict)
 
         nonlocal recognized_words
         recognized_words += pronunciation_result.words
